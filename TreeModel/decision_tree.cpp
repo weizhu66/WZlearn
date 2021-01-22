@@ -76,6 +76,8 @@ TreeNode* DecisionTreeClassifier::build_tree(MatrixType &X, MatrixType &y, int d
             }
         }
     }
+    delete X_y;
+    X_y = nullptr;
     if(largest_gain > this->min_impurity){
         TreeNode *true_br = build_tree(best_branch[leftX],best_branch[leftY],depth+1);
         TreeNode *false_br = build_tree(best_branch[rightX],best_branch[rightY],depth+1);

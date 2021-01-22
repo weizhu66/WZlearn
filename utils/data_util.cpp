@@ -56,8 +56,26 @@ float DataUtil::cal_entropy(MatrixType &y) {
     float entropy = 0;
     for(auto it = s.begin();it!=s.end();it++){
         int count = MatrixUtils::label_equals_c_count(y,*it);
-        float p = count/y.rows();
+        float p = (float)count/(float)y.rows();
         entropy += -p * log(p)/log(2);
     }
     return entropy;
+}
+
+std::vector<MatrixType*> DataUtil::bootstrap_data(MatrixType &X_y,int n){
+    int row_ = X_y.rows();
+    int col_ = X_y.cols();
+    std::vector<MatrixType*> output;
+    for (int i = 0; i < n; ++i) {
+        vector<int> index;
+        for (int j = 0; j < row_ ; ++j) {
+            index.push_back(rand()%(row_));
+        }
+        auto *tmp = new MatrixType(row_,col_);
+        for (int j = 0; j < row_ ; ++j) {
+            tmp->row(j) << X_y.row(index[j]) ;
+        }
+        output.push_back(tmp);
+    }
+    return output;
 }

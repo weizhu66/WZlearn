@@ -13,4 +13,5 @@ namespace DataUtil{
     std::vector<DataSet*> train_test_split(DataSet *dataSet,float train_percent, unsigned seed=0);
     DataSet* shuffle_data(DataSet *dataSet, unsigned seed);
     float cal_entropy(MatrixType &y);
+    std::vector<MatrixType*> bootstrap_data(MatrixType &X_y,int bs);
 }

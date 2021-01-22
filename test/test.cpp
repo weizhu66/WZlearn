@@ -7,6 +7,7 @@
 #include "../Bayes/naive_bayes.h"
 #include "../TreeModel/decision_tree.h"
 #include "../LinearModel/logistic_regression.h"
+#include "../TreeModel/random_forest.h"
 #include <iostream>
 using namespace std;
 
@@ -55,10 +56,36 @@ void test_decision_tree(){
     delete X;
     delete y;
 }
-
+void test_random_forest(){
+    MatrixType *X = new MatrixType(10,3);
+    MatrixType *y = new MatrixType(10,1);
+    *X << 1,2,1,
+            2,3,1,
+            1,2,2,
+            3,1,2,
+            1,2,1,
+            2,3,1,
+            1,2,2,
+            3,3,1,
+            1,2,1,
+            3,2,1;
+    *y << 1,1,2,1,0,1,0,1,2,0;
+    RandomForest model(10,2,3);
+    MatrixType *x = new MatrixType(4,3);
+    *x << 1,2,1,
+            2,3,1,
+            1,2,2,
+            3,1,2;
+    model.fit(X,y);
+    MatrixType y_pred = model.predict(x);
+    cout << y_pred.transpose() << endl;
+    delete X;
+    delete y;
+}
 int main(){
 //    test_bayes();
 //    test_decision_tree();
-    test_logistic_regression();
+//    test_logistic_regression();
+    test_random_forest();
     return 0;
 }

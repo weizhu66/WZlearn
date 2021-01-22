@@ -14,4 +14,4 @@ add_executable(ML
         utils/matrix_util.cpp
         utils/matrix_util.h LinearModel/logistic_regression.cpp
         LinearModel/logistic_regression.h data/data_loader.h data/data_loader.cpp utils/data_util.h utils/data_util.cpp Bayes/naive_bayes.h Bayes/naive_bayes.cpp
-        test/test.cpp TreeModel/decision_tree.h TreeModel/decision_tree.cpp)
+        test/test.cpp TreeModel/decision_tree.h TreeModel/decision_tree.cpp TreeModel/random_forest.h TreeModel/random_forest.cpp)
