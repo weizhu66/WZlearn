@@ -19,21 +19,25 @@ void LinearRegression::fit(MatrixType *X, MatrixType *y) {
     MatrixType* new_Xp = MatrixUtils::add_first_col(*X);
     MatrixType new_X_trans = (*new_Xp).transpose();
     for(int i =0;i<this->n_iterations;i++){
-        MatrixType y_pred = *(new_Xp) * (this->w);
+        MatrixType y_pred = *(new_Xp) * (*this->w);
         MatrixType y_bias = y_pred - *y;
         float loss;
         MatrixType tmp = 0.5 * y_bias.array()*y_bias.array();
         MatrixType w_grad = new_X_trans * y_bias;
         loss = tmp.mean();
         if(this->regularization!= nullptr){
-            loss += this->regularization->loss(this->w);
-            w_grad = w_grad + this->regularization->grad(this->w);
+            loss += this->regularization->loss(*this->w);
+            w_grad = w_grad + this->regularization->grad(*this->w);
         }
 
         (*losses).push_back(loss);
 //        cout << "iter:" << i <<"loss: " << loss << endl;
-        this->w = (this->w) - this->learning_rate * w_grad;
+        *this->w -= this->learning_rate * w_grad;
     }
+    this->_coef = new MatrixType(1,n_features);
+    this->_b = new float ;
+    *this->_coef << (*this->w).bottomRows(n_features).transpose();
+    *this->_b = (*this->w)(0,0);
     delete new_Xp;
     new_Xp = nullptr;
 }
@@ -42,13 +46,13 @@ void LinearRegression::init_weights(int n_features) {
     float limit = sqrt(n_features);
     MatrixType tmp_w = Eigen::MatrixXf::Random(n_features,1);
     int b = 0;
-    this->w = MatrixType(n_features+1,1);
-    this->w << b,tmp_w*limit;
+    this->w = new MatrixType(n_features+1,1);
+    *this->w << b,tmp_w*limit;
 }
 
 MatrixType LinearRegression::predict(MatrixType *X){
     MatrixType* new_Xp = MatrixUtils::add_first_col(*X);
-    MatrixType y_pred = *new_Xp * this->w;
+    MatrixType y_pred = *new_Xp * (*this->w);
     delete new_Xp;
     new_Xp = nullptr;
     return y_pred;
@@ -63,9 +67,20 @@ LinearRegression::~LinearRegression() {
         delete regularization;
         regularization = nullptr;
     }
+    if(this->_coef!= nullptr){
+        delete _coef;
+        _coef = nullptr;
+    }
+    if(this->_b!= nullptr){
+        delete _b;
+        _b = nullptr;
+    }
 }
 
 Regularization::Regularization() {
+
+}
+Regularization::~Regularization() {
 
 }
 Regularization::Regularization(float alpha) {
@@ -85,12 +100,16 @@ MatrixType L1_regularization::grad(const MatrixType &w) {
 L1_regularization::L1_regularization(float alpha):Regularization(alpha) {
 //    this->alpha = alpha;
 }
+L1_regularization::~L1_regularization() {
 
+}
 
 L2_regularization::L2_regularization(float alpha):Regularization(alpha) {
 
 }
+L2_regularization::~L2_regularization() {
 
+}
 float L2_regularization::loss(const MatrixType &w) {
     float loss = (w.transpose()*w).sum();
     return 0.5 * this->alpha * loss;

@@ -10,8 +10,7 @@ class LogisticRegression{
 public:
     float learning_rate;
     int iterations;
-    MatrixType w;
-
+    MatrixType* w;
 
     LogisticRegression(int iterations,float learning_rate);
     ~LogisticRegression();

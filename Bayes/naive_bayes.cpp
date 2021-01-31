@@ -3,6 +3,7 @@
 
 #define MEAN "mean"
 #define VAR "var"
+#define PI 3.141592657
 NaiveBayes::NaiveBayes() {
     this->parameters = unordered_map<int,unordered_map<string,MatrixType>>();
     this->prior_prob = unordered_map<int,float>();
@@ -34,7 +35,7 @@ MatrixType NaiveBayes::_pdf(MatrixType *X, int n_class) {
     MatrixType var = MatrixUtils::boardcast_rows(this->parameters[n_class][VAR],
                                                   X->rows());
     MatrixType numerator = (-(((*X) - mean).array().pow(2)/(2*var.array() + eps))).array().exp();
-    MatrixType denominator = (2*3.141592657*var.array() + eps).array().sqrt();
+    MatrixType denominator = (2*PI*var.array() + eps).array().sqrt();
     MatrixType res = (numerator.array()/denominator.array()).array().log().rowwise().sum();
     //res shape(m_samples,1)
     return res.transpose();
@@ -60,6 +61,6 @@ MatrixType NaiveBayes::predict(MatrixType *X) {
         delete output;
         output = nullptr;
     }
-    return prediction;
+    return prediction.transpose();
 }
 

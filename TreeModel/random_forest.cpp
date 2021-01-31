@@ -7,12 +7,16 @@ RandomForest::RandomForest(int n_estimators, int min_sample_split, int max_depth
     this->tree_classifiers = std::vector<DecisionTreeClassifier*>();
 
     for (int i = 0; i < this->n_estimators ; ++i) {
-        DecisionTreeClassifier* tree = new DecisionTreeClassifier(min_sample_split,1e-7,
-                                        max_depth);
+        DecisionTreeClassifier* tree = new DecisionTreeClassifier(this->min_sample_split,1e-7,
+                                        this->max_depth);
         tree_classifiers.push_back(tree);
     }
 }
-
+RandomForest::~RandomForest() {
+    for(auto it = this->tree_classifiers.begin();it!=this->tree_classifiers.end();it++){
+        delete *it;
+    }
+}
 void RandomForest::fit(MatrixType *X, MatrixType *y) {
     MatrixType X_y = MatrixType(X->rows(),X->cols()+1);
     X_y << *X,*y;

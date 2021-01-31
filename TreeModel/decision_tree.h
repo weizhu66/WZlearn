@@ -41,7 +41,7 @@ public:
 
     float information_gain(MatrixType &y,MatrixType &y1,MatrixType &y2);
 
-    int vote_for_value(MatrixType &y);
+    int* vote_for_value(MatrixType &y);
 
     MatrixType predict(MatrixType *X);
 

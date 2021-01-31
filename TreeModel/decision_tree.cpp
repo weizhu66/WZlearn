@@ -85,8 +85,8 @@ TreeNode* DecisionTreeClassifier::build_tree(MatrixType &X, MatrixType &y, int d
                             nullptr,true_br,false_br);
     }
 //    int value = vote_for_value(y);
-    int *value_p = new int(vote_for_value(y));
-    return new TreeNode(NULL,NULL,value_p, nullptr,nullptr);
+    int *value_p = vote_for_value(y);
+    return new TreeNode(-1,-1,value_p, nullptr,nullptr);
 }
 
 std::vector<MatrixType*> DecisionTreeClassifier::divide(MatrixType *X_y, int feature_index, int threshold) {
@@ -110,15 +110,15 @@ float DecisionTreeClassifier::information_gain(MatrixType &y,MatrixType &y1,Matr
     return information_gain_;
 }
 
-int DecisionTreeClassifier::vote_for_value(MatrixType &y){
-    int most_common = NULL;
+int* DecisionTreeClassifier::vote_for_value(MatrixType &y){
+    int* most_common = new int;
     int max_count = 0;
     std::set<int> s = MatrixUtils::unique(y);
     for(auto iter = s.begin();iter!= s.end();iter++){
         int count = MatrixUtils::label_equals_c_count(y,*iter);
         if(count > max_count){
             max_count = count;
-            most_common = *iter;
+            *most_common = *iter;
         }
     }
     return most_common;

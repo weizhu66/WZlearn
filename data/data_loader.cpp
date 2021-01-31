@@ -42,8 +42,8 @@ DataLoader::DataLoader() {
 }
 DataSet* DataLoader::load_file(std::string const &file_path,string const &pattern) {
     ifstream infile;
-    infile.open(file_path.data());   //将文件流对象与文件连接起来
-    assert(infile.is_open());   //若失败,则输出错误消息,并终止程序运行
+    infile.open(file_path.data());
+    assert(infile.is_open());
     string s;
     int rows = 0;
     int cols = 0;
@@ -68,7 +68,7 @@ DataSet* DataLoader::load_file(std::string const &file_path,string const &patter
                 (*X)(i,j) = v[i][j];
             } else{
                 (*y)(i,0) = v[i][j];
-            };
+            }
         }
     }
     infile.close();

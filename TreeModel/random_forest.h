@@ -15,6 +15,7 @@ public:
 
     RandomForest(int n_estimators = 200,int min_sample_split = 2,
                  int max_depth=std::numeric_limits<int>::max());
+    ~RandomForest();
     void fit(MatrixType *X,MatrixType *y);
 
     MatrixType predict(MatrixType *X);
