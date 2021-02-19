@@ -1,6 +1,4 @@
-//
-// Created by asus on 2021-01-19.
-//
+
 #pragma once
 #include "matrix_util.h"
 #include <string>

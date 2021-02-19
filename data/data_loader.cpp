@@ -1,6 +1,4 @@
-//
-// Created by asus on 2021-01-19.
-//
+
 #include "data_loader.h"
 #include <fstream>
 #include <iostream>

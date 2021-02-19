@@ -11,6 +11,11 @@ double DataUtil::accuracy_score(MatrixType const &y_pred, MatrixType const &y) {
     return m.array().sum()/y.rows();
 }
 
+double DataUtil::mean_squared_error(MatrixType const &y_pred,MatrixType const &y){
+    double mse = (y_pred.array()-y.array()).array().pow(2).mean();
+    return mse;
+}
+
 vector<DataSet*> DataUtil::train_test_split(DataSet *data_set, float train_percent,
         unsigned seed) {
     int rows = (*data_set->X).rows();
@@ -52,7 +57,7 @@ float DataUtil::cal_entropy(MatrixType &y) {
     /*
      * y.shape (m_samples,1)
      * */
-    set<int> s = MatrixUtils::unique(y);
+    set<int> s = MatrixUtils::unique<int>(y);
     float entropy = 0;
     for(auto it = s.begin();it!=s.end();it++){
         int count = MatrixUtils::label_equals_c_count(y,*it);
@@ -78,4 +83,14 @@ std::vector<MatrixType*> DataUtil::bootstrap_data(MatrixType &X_y,int n){
         output.push_back(tmp);
     }
     return output;
+}
+
+MatrixType* DataUtil::standardize(MatrixType const &X){
+    MatrixType* st = new MatrixType(X.rows(),X.cols());
+    MatrixType mean = X.colwise().mean();
+    MatrixType var = MatrixUtils::col_var(X);
+    for (int i = 0; i < X.cols() ; ++i) {
+        st->col(i) << (X.col(i).array() - mean(0,i)) / sqrt(var(0,i));
+    }
+    return st;
 }

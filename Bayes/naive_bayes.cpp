@@ -13,7 +13,7 @@ void NaiveBayes::fit(MatrixType *X, MatrixType *y) {
     string mean_string = MEAN;
     string var_string = VAR;
 
-    this-> classes = MatrixUtils::unique(*y);
+    this-> classes = MatrixUtils::unique<int>(*y);
     for(auto iter = classes.begin();iter!=classes.end();iter++){
         MatrixType* X_c = MatrixUtils::where_y_equals_c(*X,*y,*iter);
         MatrixType X_c_mean = X_c->colwise().mean(); //shape (1,n_features)

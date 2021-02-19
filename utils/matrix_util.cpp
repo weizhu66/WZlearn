@@ -26,15 +26,7 @@ MatrixType MatrixUtils::matrix_sigmod(const MatrixType &X) {
     return tmp;
 }
 
-std::set<int> MatrixUtils::unique(MatrixType &y) {
-    assert(y.cols()==1);
-    std::set<int> set_;
-    int rows = y.rows();
-    for (int i = 0; i < rows ; ++i) {
-        set_.insert(y(i,0));
-    }
-    return set_;
-}
+
 
 MatrixType* MatrixUtils::where_y_equals_c(MatrixType &X,MatrixType &y,int c){
     assert(y.cols()==1);
@@ -66,21 +58,55 @@ MatrixType* MatrixUtils::where_y_not_equals_c(MatrixType &X,MatrixType &y,int c)
     return X_c;
 }
 
+MatrixType* MatrixUtils::where_y_bigger_c(MatrixType &X,MatrixType &y,float c){
+    assert(y.cols()==1);
+    std::vector<int> v;
+    for (int i = 0; i < y.rows() ; ++i) {
+        if(c <= y(i,0)){
+            v.push_back(i);
+        }
+    }
+    MatrixType* X_c = new MatrixType(v.size(),X.cols());
+    for (int j = 0; j < v.size(); ++j) {
+        X_c->row(j) << X.row(v[j]);
+    }
+    return X_c;
+}
+
+MatrixType* MatrixUtils::where_y_smaller_c(MatrixType &X,MatrixType &y,float c){
+    assert(y.cols()==1);
+    std::vector<int> v;
+    for (int i = 0; i < y.rows() ; ++i) {
+        if(c > y(i,0)){
+            v.push_back(i);
+        }
+    }
+    MatrixType* X_c = new MatrixType(v.size(),X.cols());
+    for (int j = 0; j < v.size(); ++j) {
+        X_c->row(j) << X.row(v[j]);
+    }
+    return X_c;
+}
 /*
  * 求每一列的方差
  * */
 MatrixType MatrixUtils::col_var(MatrixType const &X){
     MatrixType _mean = X.colwise().mean();
     int cols = _mean.cols();
+    int rows = X.rows();
     MatrixType vars(1,cols);
     for (int i = 0; i < cols ; ++i) {
-        MatrixType _t(X.rows(),1);
-        _t.fill(_mean(0,i));
-        float v = (X.col(i).array() - _t.array()).pow(2).sum()/cols;
+        float mean = _mean(0,i);
+        float v = (X.col(i).array() - mean).pow(2).sum()/rows;
         vars(0,i) = v;
     }
     return vars;
-
+}
+float MatrixUtils::calculate_val(MatrixType const &y){
+    int rows = y.rows();
+    float mean = y.array().mean();
+    float var = (y.array() - mean).array().pow(2).sum()/rows;
+    return var;
 }
 
 MatrixType MatrixUtils::boardcast_rows(MatrixType &X,int rows) {
