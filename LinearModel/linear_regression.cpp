@@ -59,6 +59,10 @@ MatrixType LinearRegression::predict(MatrixType *X){
 }
 
 LinearRegression::~LinearRegression() {
+    if(this->w!= nullptr){
+        delete w;
+        w = nullptr;
+    }
     if(this->losses!=nullptr){
         delete losses;
         losses = nullptr;

@@ -72,6 +72,9 @@ void test_decision_tree(){
     model.fit(X,y);
     MatrixType y_pred = model.predict(x);
     cout << y_pred.transpose() << endl;
+    delete X;
+    delete y;
+    delete x;
 }
 void test_random_forest(){
     MatrixType *X = new MatrixType(10,3);
@@ -98,6 +101,7 @@ void test_random_forest(){
     cout << y_pred.transpose() << endl;
     delete X;
     delete y;
+    delete x;
 }
 void test_decision_tree_regressor(){
     DataLoader loader;

@@ -22,7 +22,8 @@ void NaiveBayes::fit(MatrixType *X, MatrixType *y) {
         tmp_map.insert(pair<string,MatrixType>{mean_string,X_c_mean});
         tmp_map.insert(pair<string,MatrixType>{var_string,X_c_var});
         this->parameters.insert(pair<int,unordered_map<string,MatrixType>>{*iter,tmp_map} );
-        this->prior_prob.insert(pair<int,float>{*iter,X_c->cols()-(*X).cols()});
+        float prob = (float)X_c->rows() / (float)(*X).rows();
+        this->prior_prob.insert(pair<int,float>{*iter,prob});
         delete  X_c;
         X_c = nullptr;
     }
@@ -63,4 +64,3 @@ MatrixType NaiveBayes::predict(MatrixType *X) {
     }
     return prediction.transpose();
 }
-

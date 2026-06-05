@@ -112,7 +112,7 @@ float MatrixUtils::calculate_val(MatrixType const &y){
 MatrixType MatrixUtils::boardcast_rows(MatrixType &X,int rows) {
     assert(X.rows()==1);
     MatrixType X_(rows,X.cols());
-    for (int i = 1; i < rows; ++i) {
+    for (int i = 0; i < rows; ++i) {
         X_.row(i) << X;
     }
     return X_;
@@ -143,4 +143,3 @@ int MatrixUtils::label_equals_c_count(MatrixType &y,int c){
     }
     return count;
 }
-
